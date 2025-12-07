@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 
-  <title>自動文字変換ツーノレ</title>
+  <title>自動文字へそかそツーノレ</title>
   <style>
     body {
       font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Hiragino Kaku Gothic ProN", "Noto Sans JP", sans-serif;
@@ -73,15 +73,15 @@
 
 <body>
   <div class="wrap">
-    <h1>自動文字変換ツーノレ</h1>
+    <h1>自動文字へそかそツーノレ</h1>
 
     <div class="panel">
       <label class="small">入力：</label>
-      <textarea id="input" placeholder="変換したいテキストを貼り付けるか, 入力してください. "></textarea>
+      <textarea id="input" placeholder="¡へそかそしたいテキストを貼り付けるか, 入力してください!"></textarea>
 
       <div style="margin-top:12px">
-        <label class="small">変換結果：</label>
-        <textarea id="output" readonly placeholder="ここに変換結果が表示されます. "></textarea>
+        <label class="small">へそかそ結果：</label>
+        <textarea id="output" readonly placeholder="¡ここにへそかそ結果が表示されます!"></textarea>
       </div>
 
       <div class="row">
@@ -103,7 +103,6 @@
       { from: '、', to: ', ' }
     ];
 
-    // 句読点・文字置換
     function applyBasicRules(text) {
       for (const rule of baseRules) {
         text = text.split(rule.from).join(rule.to);
@@ -112,7 +111,6 @@
     }
 
     function addSentenceMarks(text) {
-      // 文末記号で区切る時に区切り文字を保持
       const sentences = text.match(/[^!?！？。]*[!?！？。]*/g);
 
       if (!sentences) return text;
@@ -124,14 +122,12 @@
     }
 
     function applyHeadMarks(sentence) {
-      // 文末に連続する !?！？ を抽出
       const tail = sentence.match(/[!?！？]+$/);
 
       if (!tail) return sentence;
 
       const marks = tail[0];
 
-      // 逆順にして変換
       const reversed = [...marks]
         .reverse()
         .map(ch => {
