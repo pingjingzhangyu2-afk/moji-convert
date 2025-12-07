@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+  <title>自動文字変換ツール</title>
+  <style>
+    body { font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Hiragino Kaku Gothic ProN", "Noto Sans JP", sans-serif; margin: 18px; line-height:1.5; color:#111 }
+    h1 { font-size:1.25rem; margin-bottom:8px }
+    .wrap { max-width:900px; margin:0 auto; }
+    textarea { width:100%; min-height:160px; padding:10px; box-sizing:border-box; font-size:1rem; }
+    .row { display:flex; gap:8px; margin-top:10px; flex-wrap:wrap; }
+    button { padding:8px 12px; font-size:0.95rem; cursor:pointer; }
+    .panel { margin-top:12px; padding:10px; border-radius:6px; border:1px solid #ddd; background:#fafafa }
+    label.small { font-size:0.9rem; color:#555; }
+    @media(max-width:520px){ textarea{ min-height:200px } .row{ flex-direction:column } }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>自動文字変換ツール</h1>
+
+    <div class="panel">
+      <label class="small">入力：</label>
+      <textarea id="input" placeholder="変換したいテキストを貼り付けるか, 入力してください. "></textarea> 
+
+      <div style="margin-top:12px">
+        <label class="small">変換結果：</label>
+        <textarea id="output" readonly placeholder="ここに変換結果が表示されます. "></textarea> 
+      </div>
+
+      <div class="row">
+        <button id="copyOut">結果をコピー</button>
+        <button id="swap">入力と出力を入れ替え</button>
+      </div>
+
+
+    </div>
+  </div>
+
+  <script>
+    const rules = [
+      { from: 'ん', to: 'そ' },
+      { from: 'ン', to: 'ソ' },
+      { from: 'ル', to: 'ノレ' },
+    ];
+
+    const $ = id => document.getElementById(id);
+    const input = $('input');
+    const output = document.getElementById("output");
+    const copyBtn = $('copyOut');
+    const swapBtn = $('swap');
+
+    function transform(text) {
+      let result = text;
+      for (const rule of rules) {
+        result = result.split(rule.from).join(rule.to);
+      }
+      return result;
+    }
+
+    function updateOutput() {
+      output.value = transform(input.value);
+    }
+
+    // 入力の自動変換
+    ["input", "keyup", "change", "blur", "compositionend"].forEach(ev =>
+      input.addEventListener(ev, updateOutput)
+    );
+
+    copyBtn.addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(output.value);
+        copyBtn.textContent = 'コピー済み ✔';
+        setTimeout(() => copyBtn.textContent = '結果をコピー', 1500);
+      } catch(e) {
+        alert("コピー出来ませんでした. ");
+      }
+    });
+
+    swapBtn.addEventListener('click', () => {
+      const tmp = input.value;
+      input.value = output.value;
+      output.value = tmp;
+      updateOutput();
+      input.focus();
+    });
+
+        window.onload = () => input.focus();
+  </script>
+</body>
+</html>
