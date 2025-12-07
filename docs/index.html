@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 
-  <title>自動文字変換ツール</title>
+  <title>自動文字変換ツーノレ</title>
   <style>
     body { font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Hiragino Kaku Gothic ProN", "Noto Sans JP", sans-serif; margin: 18px; line-height:1.5; color:#111 }
     h1 { font-size:1.25rem; margin-bottom:8px }
@@ -20,7 +20,7 @@
 </head>
 <body>
   <div class="wrap">
-    <h1>自動文字変換ツール</h1>
+    <h1>自動文字変換ツーノレ</h1>
 
     <div class="panel">
       <label class="small">入力：</label>
@@ -34,6 +34,7 @@
       <div class="row">
         <button id="copyOut">結果をコピー</button>
         <button id="swap">入力と出力を入れ替え</button>
+        <button id="clear">クリア</button>
       </div>
 
 
@@ -48,10 +49,11 @@
     ];
 
     const $ = id => document.getElementById(id);
-    const input = $('input');
+    const input = document.getElementById("input");
     const output = document.getElementById("output");
-    const copyBtn = $('copyOut');
-    const swapBtn = $('swap');
+    const copyBtn = document.getElementById("copyOut");
+    const swapBtn = document.getElementById("swap");
+    const clearBtn = document.getElementById("clear");
 
     function transform(text) {
       let result = text;
@@ -65,10 +67,14 @@
       output.value = transform(input.value);
     }
 
-    // 入力の自動変換
-    ["input", "keyup", "change", "blur", "compositionend"].forEach(ev =>
-      input.addEventListener(ev, updateOutput)
-    );
+    input.addEventListener("input", updateOutput);
+    input.addEventListener("keyup", updateOutput);
+
+    clearBtn.addEventListener('click', () => {
+      input.value = '';
+      output.value = '';
+      input.focus();
+    });
 
     copyBtn.addEventListener('click', async () => {
       try {
@@ -76,7 +82,7 @@
         copyBtn.textContent = 'コピー済み ✔';
         setTimeout(() => copyBtn.textContent = '結果をコピー', 1500);
       } catch(e) {
-        alert("コピー出来ませんでした. ");
+        alert("コピー出来ませそでした. ");
       }
     });
 
